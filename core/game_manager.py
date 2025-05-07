@@ -68,8 +68,11 @@ class GameManager:
         # Ensure count is within limits
         count = max(1, min(100, count))
         
+        # Use lowercase for rock name lookup
+        rock_name_lower = rock_name.lower()
+        
         results = self.mining_skill.mine_rock(
-            rock_name, 
+            rock_name_lower, 
             mining_level, 
             equipment_bonuses,
             has_faster_mining,
@@ -126,27 +129,33 @@ class GameManager:
         """
         crafting_level = self.player.skills.get_level("crafting")
         
-        # Check if the item exists
+        # Check if the item exists - use lowercase for lookup
         item_key = item_name.lower()
         craftable_items = self.crafting_skill.craftable_items
-        if item_key not in craftable_items:
+        
+        # Find the matching item regardless of case
+        matching_key = None
+        for key in craftable_items:
+            if key.lower() == item_key:
+                matching_key = key
+                break
+        
+        if matching_key is None:
             print(f"Unknown item: {item_name}")
             return
         
-        # Ensure count is within limits
-        count = max(1, min(100, count))
+        # Use the matching key for the rest of the method
+        craftable_item = craftable_items[matching_key]
         
         # Check if the player has the materials
-        craftable_item = craftable_items[item_key]
         has_materials = True
         material_count = 0
         
-        # Calculate how many items can be crafted based on available materials
         for material, quantity_per_item in craftable_item.materials.items():
+            total_quantity = quantity_per_item * count
             available = self.player.inventory.count_item(material)
-            required = quantity_per_item * count
             
-            if available < required:
+            if available < total_quantity:
                 max_craftable = available // quantity_per_item
                 if max_craftable == 0:
                     print(f"You don't have enough {material}. Need {quantity_per_item} per item.")
@@ -243,7 +252,10 @@ class GameManager:
         # Ensure count is within limits
         count = max(1, min(100, count))
         
-        # Check if the player has the items
+        # Use lowercase for item name lookup
+        item_name_lower = item_name.lower()
+        
+        # Check if the player has the items - case insensitive
         available_count = self.player.inventory.count_item(item_name)
         if available_count == 0:
             print(f"You don't have any {item_name} in your inventory.")
@@ -306,7 +318,7 @@ class GameManager:
         
         # Get the item from inventory
         for slot in self.player.inventory.slots:
-            if not slot.is_empty() and slot.item.name == item_name:
+            if not slot.is_empty() and slot.item.name.lower() == item_name.lower():
                 item = slot.item
                 break
         else:
@@ -410,20 +422,21 @@ class GameManager:
         Args:
             item_name: Name of the item to equip
         """
-        # Check if the player has the item
+        # Check if the player has the item - case insensitive
         if not self.player.inventory.has_item(item_name):
             print(f"You don't have a {item_name} in your inventory.")
             return
         
         # Determine the equipment slot
+        item_name_lower = item_name.lower()
         slot = None
-        if "ring" in item_name.lower():
+        if "ring" in item_name_lower:
             slot = "ring"
-        elif "pickaxe" in item_name.lower():
+        elif "pickaxe" in item_name_lower:
             slot = "main_hand"
-        elif "chisel" in item_name.lower():
+        elif "chisel" in item_name_lower:
             slot = "off_hand"
-        elif "cape" in item_name.lower():
+        elif "cape" in item_name_lower:
             slot = "cape"
         
         if not slot:
@@ -441,7 +454,7 @@ class GameManager:
             ("bronze", 1), ("iron", 5), ("mithril", 15), ("adamant", 30),
             ("coal", 50), ("rune", 65), ("dragon", 75), ("elite", 85), ("king", 95)
         ]:
-            if tier in item_name.lower():
+            if tier in item_name_lower:
                 level_req = level
                 bonus_value = 0.05 + (level // 10) * 0.05
                 bonuses = {"mining_speed": bonus_value, "extra_ore_chance": bonus_value}

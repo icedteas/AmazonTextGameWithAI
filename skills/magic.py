@@ -89,7 +89,9 @@ class MagicSkill:
         Returns:
             int: Gold value of the item, or 0 if not alchemizable
         """
+        # Convert item_name to lowercase for case-insensitive lookup
         item_key = item_name.lower()
+        
         if item_key in self.alchemy_values:
             return self.alchemy_values[item_key].gold_value
         return 0
@@ -105,7 +107,9 @@ class MagicSkill:
         Returns:
             bool: True if the item can be alchemized at the player's level
         """
+        # Convert item_name to lowercase for case-insensitive lookup
         item_key = item_name.lower()
+        
         if item_key not in self.alchemy_values:
             return False
         
@@ -127,7 +131,9 @@ class MagicSkill:
                 - XP gained
                 - Easter egg obtained (or None if none)
         """
+        # Convert item_name to lowercase for case-insensitive lookup
         item_key = item_name.lower()
+        
         if item_key not in self.alchemy_values:
             print(f"Cannot alchemize {item_name}.")
             return []

@@ -98,7 +98,7 @@ class Inventory:
         # First try to add to existing stacks if item is stackable
         if item.stackable:
             for slot in self.slots:
-                if not slot.is_empty() and slot.item.name == item.name:
+                if not slot.is_empty() and slot.item.name.lower() == item.name.lower():
                     remaining = slot.add_item(item, remaining)
                     if remaining == 0:
                         return True
@@ -123,11 +123,12 @@ class Inventory:
         Returns:
             int: How many were actually removed
         """
+        item_name_lower = item_name.lower()
         remaining = quantity
         removed = 0
         
         for slot in self.slots:
-            if not slot.is_empty() and slot.item.name == item_name:
+            if not slot.is_empty() and slot.item.name.lower() == item_name_lower:
                 _, qty_removed = slot.remove_item(remaining)
                 removed += qty_removed
                 remaining -= qty_removed
@@ -147,9 +148,10 @@ class Inventory:
         Returns:
             bool: True if the inventory has enough of the item
         """
+        item_name_lower = item_name.lower()
         total = 0
         for slot in self.slots:
-            if not slot.is_empty() and slot.item.name == item_name:
+            if not slot.is_empty() and slot.item.name.lower() == item_name_lower:
                 total += slot.quantity
                 if total >= quantity:
                     return True
@@ -165,9 +167,10 @@ class Inventory:
         Returns:
             int: Total quantity of the item
         """
+        item_name_lower = item_name.lower()
         total = 0
         for slot in self.slots:
-            if not slot.is_empty() and slot.item.name == item_name:
+            if not slot.is_empty() and slot.item.name.lower() == item_name_lower:
                 total += slot.quantity
         return total
     

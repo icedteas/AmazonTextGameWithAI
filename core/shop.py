@@ -89,7 +89,7 @@ class Shop:
         Args:
             shop_item: The shop item to add
         """
-        self.items[shop_item.name] = shop_item
+        self.items[shop_item.name.lower()] = shop_item
     
     def get_item(self, item_name: str) -> Optional[ShopItem]:
         """
@@ -101,7 +101,11 @@ class Shop:
         Returns:
             Optional[ShopItem]: The shop item, if found
         """
-        return self.items.get(item_name)
+        # Convert to lowercase for case-insensitive lookup
+        item_key = item_name.lower()
+        
+        # Check for the item with case-insensitive matching
+        return self.items.get(item_key)
     
     def display(self) -> str:
         """
@@ -119,7 +123,7 @@ class Shop:
         }
         
         for item_name, shop_item in self.items.items():
-            if "Cape" in item_name:
+            if "Cape" in shop_item.name:
                 categories["Skill Capes"].append(shop_item)
             else:
                 categories["Powerups"].append(shop_item)

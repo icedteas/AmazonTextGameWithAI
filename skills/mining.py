@@ -85,11 +85,14 @@ class MiningSkill:
                 - XP gained
                 - Easter egg obtained (or None if none)
         """
-        if rock_name not in self.rocks:
+        # Convert rock_name to lowercase for case-insensitive lookup
+        rock_key = rock_name.lower()
+        
+        if rock_key not in self.rocks:
             print(f"Invalid rock: {rock_name}")
             return []
         
-        rock = self.rocks[rock_name]
+        rock = self.rocks[rock_key]
         
         if mining_level < rock.level_req:
             print(f"You need a Mining level of {rock.level_req} to mine {rock.name}.")

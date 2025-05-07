@@ -85,6 +85,10 @@ class GameInterface:
             }
         }
     
+    def standardize_input(self, text):
+        """Standardize input by converting to lowercase."""
+        return text.strip().lower()
+    
     def clear_screen(self) -> None:
         """Clear the terminal screen."""
         os.system('cls' if os.name == 'nt' else 'clear')
@@ -145,7 +149,7 @@ class GameInterface:
         Returns:
             bool: True to continue the game, False to quit
         """
-        command = command.strip().lower()
+        command = self.standardize_input(command)
         
         if not command:
             return True

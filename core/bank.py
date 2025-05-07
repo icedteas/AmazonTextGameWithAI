@@ -30,7 +30,7 @@ class BankSlot:
             self.quantity = quantity
             return 0
         
-        if self.item.name == item.name:
+        if self.item.name.lower() == item.name.lower():
             self.quantity += quantity
             return 0
         
@@ -88,7 +88,7 @@ class Bank:
         
         # First try to add to existing stacks
         for slot in self.slots:
-            if not slot.is_empty() and slot.item.name == item.name:
+            if not slot.is_empty() and slot.item.name.lower() == item.name.lower():
                 remaining = slot.add_item(item, remaining)
                 if remaining == 0:
                     return True
@@ -113,12 +113,13 @@ class Bank:
         Returns:
             Tuple[Optional[Item], int]: The item and quantity withdrawn
         """
+        item_name_lower = item_name.lower()
         remaining = quantity
         withdrawn_item = None
         total_withdrawn = 0
         
         for slot in self.slots:
-            if not slot.is_empty() and slot.item.name == item_name:
+            if not slot.is_empty() and slot.item.name.lower() == item_name_lower:
                 item, qty_withdrawn = slot.remove_item(remaining)
                 if withdrawn_item is None and item is not None:
                     withdrawn_item = item
@@ -142,9 +143,10 @@ class Bank:
         Returns:
             bool: True if the bank has enough of the item
         """
+        item_name_lower = item_name.lower()
         total = 0
         for slot in self.slots:
-            if not slot.is_empty() and slot.item.name == item_name:
+            if not slot.is_empty() and slot.item.name.lower() == item_name_lower:
                 total += slot.quantity
                 if total >= quantity:
                     return True
@@ -160,9 +162,10 @@ class Bank:
         Returns:
             int: Total quantity of the item
         """
+        item_name_lower = item_name.lower()
         total = 0
         for slot in self.slots:
-            if not slot.is_empty() and slot.item.name == item_name:
+            if not slot.is_empty() and slot.item.name.lower() == item_name_lower:
                 total += slot.quantity
         return total
     

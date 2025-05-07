@@ -146,7 +146,9 @@ class CraftingSkill:
                 - XP gained
                 - Easter egg obtained (or None if none)
         """
+        # Convert item_name to lowercase for case-insensitive lookup
         item_key = item_name.lower()
+        
         if item_key not in self.craftable_items:
             print(f"Invalid item: {item_name}")
             return []
